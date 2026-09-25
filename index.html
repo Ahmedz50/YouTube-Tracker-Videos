@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube Learning Tracker</title>
+    <meta name="description" content="تطبيق ويب سريع وبسيط لتتبع وحفظ الفيديوهات التعليمية وقوائم المشاهدة من يوتيوب مع إحصائيات وتخزين محلي." />
+    <meta property="og:title" content="YouTube Learning Tracker" />
+    <meta property="og:description" content="تطبيق ويب سريع وبسيط لتتبع وحفظ الفيديوهات التعليمية وقوائم المشاهدة من يوتيوب مع إحصائيات وتخزين محلي." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <!-- Application Stylesheet -->
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- Modern Sticky Navbar (Overflow-Proof) -->
+    <nav class="site-navbar" role="navigation" aria-label="شريط التنقل الرئيسي">
+      <div class="navbar-container">
+        <!-- Brand -->
+        <a class="brand-wrapper" id="brand-home-link" role="button" tabindex="0" aria-label="الصفحة الرئيسية">
+          <div class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>YouTube Tracker</h1>
+            <p class="brand-subtitle">نظّم فيديوهاتك وتابع تقدمك</p>
+          </div>
+        </a>
+
+        <!-- Navigation Tabs: Library vs Dashboard -->
+        <div class="navbar-nav" role="tablist">
+          <button type="button" class="nav-link-btn active" data-view="library" role="tab" aria-selected="true" aria-controls="view-library">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+              <line x1="7" y1="2" x2="7" y2="22"></line>
+              <line x1="17" y1="2" x2="17" y2="22"></line>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <line x1="2" y1="7" x2="7" y2="7"></line>
+              <line x1="2" y1="17" x2="7" y2="17"></line>
+              <line x1="17" y1="17" x2="22" y2="17"></line>
+              <line x1="17" y1="7" x2="22" y2="7"></line>
+            </svg>
+            <span>المكتبة</span>
+          </button>
+
+          <button type="button" class="nav-link-btn" data-view="dashboard" role="tab" aria-selected="false" aria-controls="view-dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span>الداشبورد</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="app-container">
+      
+      <!-- =====================================================================
+           PAGE VIEW 1: LIBRARY (Videos Grid First)
+           ===================================================================== -->
+      <section id="view-library" class="page-view active" role="tabpanel" aria-labelledby="tab-library">
+        <!-- Compact Toolbar (Filters, Search) -->
+        <div class="library-header">
+          <div class="toolbar-controls">
+            <!-- Search Input -->
+            <div class="search-box-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="search"
+                id="search-input"
+                class="search-input"
+                placeholder="ابحث عن فيديو بالعنوان..."
+                aria-label="البحث عن فيديو بالعنوان"
+              />
+              <button id="search-clear-btn" class="search-clear-btn" type="button" aria-label="مسح نص البحث">✕</button>
+            </div>
+
+            <!-- Filter Segmented Tabs -->
+            <div class="filter-tabs" role="tablist" aria-label="تصفية الفيديوهات حسب حالة المشاهدة">
+              <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true">
+                <span>الكل</span>
+                <span class="filter-count" id="badge-all">0</span>
+              </button>
+              <button class="filter-tab" data-filter="unwatched" role="tab" aria-selected="false">
+                <span>لم أشاهد</span>
+                <span class="filter-count" id="badge-unwatched">0</span>
+              </button>
+              <button class="filter-tab" data-filter="partial" role="tab" aria-selected="false">
+                <span>شاهدت جزءًا</span>
+                <span class="filter-count" id="badge-partial">0</span>
+              </button>
+              <button class="filter-tab" data-filter="completed" role="tab" aria-selected="false">
+                <span>مكتمل</span>
+                <span class="filter-count" id="badge-completed">0</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Summary Bar -->
+        <div id="results-summary" class="results-summary">
+          <span class="summary-text">جاري تحميل الفيديوهات...</span>
+        </div>
+
+        <!-- Videos Grid: APPEARS FIRST -->
+        <main id="videos-grid" class="videos-grid" aria-live="polite" aria-label="قائمة الفيديوهات المحفوظة">
+          <!-- Video cards generated dynamically by app.js -->
+        </main>
+
+        <!-- Empty State: Library Empty -->
+        <div id="empty-state-all" class="empty-state" style="display: none;">
+          <div class="empty-icon" aria-hidden="true">🎓</div>
+          <h3 class="empty-title">مكتبتك فارغة</h3>
+          <p class="empty-description">ابدأ بحفظ وتتبع فيديوهاتك التعليمية من يوتيوب الآن.</p>
+          <button id="empty-action-add" class="btn-primary" type="button">
+            <span>+ إضافة أول فيديو</span>
+          </button>
+        </div>
+
+        <!-- Empty State: Filter Returned No Results -->
+        <div id="empty-state-filter" class="empty-state" style="display: none;">
+          <div class="empty-icon" aria-hidden="true">🔍</div>
+          <h3 class="empty-title">لا توجد نتائج مطابقة</h3>
+          <p class="empty-description">لا توجد فيديوهات في هذه القائمة تطابق معايير التصفية والبحث الحالية.</p>
+          <button id="empty-action-reset" class="btn-secondary" type="button">
+            <span>عرض جميع الفيديوهات</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE VIEW 2: DASHBOARD (Dedicated Separate Page)
+           ===================================================================== -->
+      <section id="view-dashboard" class="page-view" role="tabpanel" aria-labelledby="tab-dashboard">
+        <div class="dashboard-view-header">
+          <h2 class="dashboard-title">لوحة الإحصائيات ومتابعة الإنجاز</h2>
+          <p class="dashboard-subtitle">نظرة شاملة ومفصلة على مسار تعلمك ونسب اكتمال الفيديوهات.</p>
+        </div>
+
+        <!-- Progress Overview Card -->
+        <div class="progress-card">
+          <div class="progress-header">
+            <span class="progress-headline">معدل الإنجاز الإجمالي</span>
+            <span class="progress-percentage" id="dash-progress-percentage">0%</span>
+          </div>
+
+          <!-- Segmented Multi-Color Progress Bar -->
+          <div class="progress-bar-container" aria-label="شريط توزيع نسب الإنجاز">
+            <div id="progress-segment-completed" class="progress-bar-segment progress-bar-completed" style="width: 0%;" title="مكتمل"></div>
+            <div id="progress-segment-partial" class="progress-bar-segment progress-bar-partial" style="width: 0%;" title="شاهدت جزءًا"></div>
+            <div id="progress-segment-unwatched" class="progress-bar-segment progress-bar-unwatched" style="width: 0%;" title="لم أشاهد"></div>
+          </div>
+
+          <!-- Progress Legend -->
+          <div class="progress-legend">
+            <div class="legend-item">
+              <span class="legend-dot completed"></span>
+              <span>مكتمل (<span id="dash-legend-completed-pct">0%</span>)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot partial"></span>
+              <span>قيد المشاهدة (<span id="dash-legend-partial-pct">0%</span>)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot unwatched"></span>
+              <span>لم أشاهد (<span id="dash-legend-unwatched-pct">0%</span>)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric KPI Cards Grid -->
+        <div class="dashboard-metrics-grid">
+          <div class="metric-card" data-metric="total" title="اضغط للانتقال لمكتبة الفيديوهات">
+            <div class="metric-header">
+              <span class="metric-label">إجمالي الفيديوهات</span>
+              <span class="legend-dot" style="background-color: var(--primary);"></span>
+            </div>
+            <div class="metric-value" id="dash-total-count">0</div>
+            <span class="metric-action">عرض الكل ←</span>
+          </div>
+
+          <div class="metric-card" data-metric="completed" title="اضغط لعرض الفيديوهات المكتملة في المكتبة">
+            <div class="metric-header">
+              <span class="metric-label">فيديوهات مكتملة</span>
+              <span class="legend-dot completed"></span>
+            </div>
+            <div class="metric-value" id="dash-completed-count">0</div>
+            <span class="metric-action" style="color: var(--status-completed);">عرض المكتملة ←</span>
+          </div>
+
+          <div class="metric-card" data-metric="partial" title="اضغط لعرض الفيديوهات قيد المشاهدة">
+            <div class="metric-header">
+              <span class="metric-label">قيد المشاهدة</span>
+              <span class="legend-dot partial"></span>
+            </div>
+            <div class="metric-value" id="dash-partial-count">0</div>
+            <span class="metric-action" style="color: var(--status-partial);">متابعة المشاهدة ←</span>
+          </div>
+
+          <div class="metric-card" data-metric="unwatched" title="اضغط لعرض الفيديوهات التي لم تشاهدها بعد">
+            <div class="metric-header">
+              <span class="metric-label">لم تُشاهد بعد</span>
+              <span class="legend-dot unwatched"></span>
+            </div>
+            <div class="metric-value" id="dash-unwatched-count">0</div>
+            <span class="metric-action" style="color: var(--status-unwatched);">بدء المشاهدة ←</span>
+          </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="recent-section">
+          <div class="recent-header">
+            <h3 class="recent-title">آخر الفيديوهات المضافة</h3>
+            <button type="button" class="btn-secondary" id="dash-btn-go-library" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; min-height: 32px;">الانتقال للمكتبة</button>
+          </div>
+          <div id="recent-videos-list" class="recent-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- =====================================================================
+         FLOATING ACTION BUTTON (FAB) - BOTTOM LEFT
+         ===================================================================== -->
+    <button id="btn-fab-add" class="fab-add-video" type="button" aria-label="إضافة فيديو جديد">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>إضافة فيديو</span>
+    </button>
+
+    <!-- =====================================================================
+         ADD VIDEO MODAL (With Auto-Fetch Title Feature)
+         ===================================================================== -->
+    <div id="add-video-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-add-title">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+            <h2 id="modal-add-title" class="modal-title">إضافة فيديو جديد</h2>
+          </div>
+          <button id="btn-close-add-modal" class="modal-close-btn" type="button" aria-label="إغلاق النافذة">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- URL Input Field -->
+        <div class="form-field">
+          <label for="modal-youtube-url" class="form-label">
+            <span>رابط فيديو YouTube</span>
+            <span id="fetch-indicator" class="fetch-status-indicator">
+              <span class="spinner-small"></span>
+              <span>جاري جلب عنوان الفيديو...</span>
+            </span>
+          </label>
+          <input
+            type="url"
+            id="modal-youtube-url"
+            class="text-input url-input"
+            placeholder="https://www.youtube.com/watch?v=..."
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Quick Sample Links -->
+        <div class="quick-samples-bar">
+          <span>روابط للتجربة:</span>
+          <button type="button" class="btn-quick-sample" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">فيديو 1</button>
+          <button type="button" class="btn-quick-sample" data-url="https://youtu.be/kUMe1FH4CHE">فيديو 2</button>
+          <button type="button" class="btn-quick-sample" data-url="https://www.youtube.com/shorts/5O9nKjQzY2I">شورتس</button>
+        </div>
+
+        <!-- Thumbnail & Detected Metadata Preview Box -->
+        <div id="modal-preview-box" class="modal-preview-box">
+          <div class="modal-preview-thumb-wrap">
+            <img id="modal-preview-thumb-img" src="" alt="معاينة الفيديو" />
+          </div>
+          <div class="modal-preview-meta">
+            <span class="modal-preview-id-badge" id="modal-preview-id-text">ID: --</span>
+            <span class="modal-preview-detected-title" id="modal-preview-detected-title-text">...</span>
+          </div>
+        </div>
+
+        <!-- Video Title Field (Automatically Fetched & Editable) -->
+        <div class="form-field">
+          <label for="modal-video-title" class="form-label">
+            <span>عنوان الفيديو</span>
+            <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: normal;">(يتم جلبه تلقائيًا ويمكنك تعديله)</span>
+          </label>
+          <input
+            type="text"
+            id="modal-video-title"
+            class="text-input"
+            placeholder="سيتم جلب عنوان الفيديو تلقائيًا عند لصق الرابط..."
+            autocomplete="off"
+          />
+        </div>
+
+        <!-- Watch Status Field -->
+        <div class="form-field">
+          <label for="modal-video-status" class="form-label">الحالة المبدئية</label>
+          <select id="modal-video-status" class="text-input" style="padding: 0.65rem 0.85rem; cursor: pointer;">
+            <option value="unwatched">لم أشاهد</option>
+            <option value="partial">شاهدت جزءًا</option>
+            <option value="completed">مكتمل</option>
+          </select>
+        </div>
+
+        <!-- Error Message Container -->
+        <div id="modal-add-error" class="error-message" role="alert"></div>
+
+        <!-- Modal Actions -->
+        <div class="modal-actions">
+          <button id="btn-cancel-add-modal" class="btn-secondary" type="button">إلغاء</button>
+          <button id="btn-save-video" class="btn-primary" type="button">
+            <span>حفظ في المكتبة</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         DELETE CONFIRMATION MODAL
+         ===================================================================== -->
+    <div id="delete-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="delete-dialog-title">
+      <div class="modal-dialog" style="max-width: 420px;">
+        <div class="modal-header">
+          <div class="modal-danger-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+          </div>
+          <h3 id="delete-dialog-title" class="modal-title">تأكيد الحذف</h3>
+        </div>
+
+        <div class="modal-body">
+          <p>هل تريد حذف هذا الفيديو من مكتبتك؟</p>
+          <div id="delete-modal-video-title" class="modal-video-title-preview"></div>
+        </div>
+
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
+          <button id="btn-cancel-delete" class="btn-secondary" type="button">إلغاء</button>
+          <button id="btn-confirm-delete" class="btn-danger" type="button">حذف الفيديو</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container" aria-live="assertive"></div>
+
+    <!-- Application Script -->
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "YouTube Learning Tracker",
+  "description": "تطبيق ويب سريع وبسيط لتتبع وحفظ الفيديوهات التعليمية وقوائم المشاهدة من يوتيوب مع إحصائيات وتخزين محلي.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
